@@ -6,15 +6,8 @@ import java.util.List;
 public class GameState {
     private final int size;
     private MineSweeper game;
-    private IO io;
     private ArrayList<Integer> mineLocations;
     private String[] gridArray;
-    private List<Integer> guessedLocations = new ArrayList<Integer>();
-
-    public GameState(int size, ArrayList<Integer> mineLocations, String[] gridArray) {
-        this.size = size;
-        this.mineLocations = mineLocations;
-    }
 
     public GameState(int size, ArrayList<Integer> mineLocations) {
         this.size = size;
@@ -38,13 +31,10 @@ public class GameState {
     }
 
     public void revealNeighbours(int guessedIndex) {
-        this.game = new MineSweeper(io, size, mineLocations);
-        guessedLocations.add(guessedIndex);
-        for (Integer individualGuess : guessedLocations) {
-            if (mineLocations.contains(individualGuess)) addMineSymbol(mineLocations);
+        this.game = new MineSweeper(size, mineLocations);
+            if (mineLocations.contains(guessedIndex)) addMineSymbol(mineLocations);
             else {
-                gridArray[individualGuess] = String.valueOf(game.neighbourMinesFound(individualGuess));
-            }
+                gridArray[guessedIndex] = String.valueOf(game.neighbourMinesFound(guessedIndex));
         }
     }
 
@@ -60,5 +50,9 @@ public class GameState {
             mineLocations.add(mineAdditions.get(i));
         }
         return mineLocations;
+    }
+
+    public String[] getCurrentState() {
+       return gridArray;
     }
 }

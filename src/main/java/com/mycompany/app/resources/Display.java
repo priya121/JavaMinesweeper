@@ -11,7 +11,7 @@ public class Display {
     private String[] rowLetter = new String[]{"A  ", "B  ", "C  ", "D  ", "E  ", "F  ", "G  ", "H  ", "I  ", "J  ", "K  "};
     private int counter = 1;
     private int index;
-    private GameState newGameState = new GameState(size, mineLocations, gridArray);
+    private GameState newGameState = new GameState(size, mineLocations);
 
     public Display(IO guesses, ArrayList<Integer> mineLocations, int size) {
         this.guesses = guesses;
@@ -27,18 +27,20 @@ public class Display {
         mineLocations.add(10);
         Display game = new Display(io, mineLocations, 100);
         GameState newGameState = new GameState(100, mineLocations);
+        System.out.println(newGameState.buildGrid());
         System.out.println(game.convertToStringDisplay(newGameState.buildGrid()));
         System.out.println("Enter a coordinate: \n");
         game.gameLoop();
     }
 
     public void gameLoop() {
-        char[] guessedString = guesses.takeInput().toCharArray();
-        UserCoordinateIndex locationIndex = new UserCoordinateIndex(guessedString, size);
+        GameState newGameState = new GameState(size, mineLocations);
         while (!newGameState.checkGameOver(gridArray)) {
+            char[] guessedString = guesses.takeInput().toCharArray();
+            UserCoordinateIndex locationIndex = new UserCoordinateIndex(guessedString, size);
             newGameState.revealNeighbours(index = locationIndex.convertCoordinateToIndex());
             clearScreen();
-            System.out.println(convertToStringDisplay(gridArray));
+            System.out.println(convertToStringDisplay(newGameState.getCurrentState()));
             System.out.println("Enter a coordinate: \n");
         }
         System.out.println(convertToStringDisplay(gridArray));

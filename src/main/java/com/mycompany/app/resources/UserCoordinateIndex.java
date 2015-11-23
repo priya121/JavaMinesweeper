@@ -16,7 +16,6 @@ public class UserCoordinateIndex {
             return converts(row, column);
         }
         int column = Character.getNumericValue(coordinates[1]);
-
         return converts(row, column);
     }
 

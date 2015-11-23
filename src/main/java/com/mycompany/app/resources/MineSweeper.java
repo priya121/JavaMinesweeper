@@ -6,16 +6,13 @@ import java.util.List;
 public class MineSweeper {
 
     public int size;
-    private IO io;
     private int width;
     private int height;
     private ArrayList<Integer> mineLocations = new ArrayList<Integer>();
-    private String grid;
 
-    public MineSweeper(IO io, int size, ArrayList<Integer> mineLocations) {
+    public MineSweeper(int size, ArrayList<Integer> mineLocations) {
         this.mineLocations = mineLocations;
         this.size = size;
-        this.io = io;
         this.width = (int) Math.sqrt(this.size);
         this.height = (int) Math.sqrt(this.size);
     }
