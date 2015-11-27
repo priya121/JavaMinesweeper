@@ -1,4 +1,5 @@
-import com.mycompany.app.resources.GameState;
+package com.mycompany.app.game;
+
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,19 +15,23 @@ public class GameStateTest {
 
     @Test
     public void checksGameOver() {
-        String[] intermediateGrid = new String[]{"•", "*", "•", "•"};
-        assertTrue(newGame.checkGameOver(intermediateGrid));
+        mineLocations.add(1);
+        GameState currentGameState = new GameState(4, mineLocations);
+        currentGameState.update(1);
+        assertTrue(currentGameState.checkGameOver());
     }
 
     @Test
     public void returnsFalseIfGameNotOver() {
-        String[] intermediateGrid = new String[]{"•", "1", "•", "•"};
-        assertFalse(newGame.checkGameOver(intermediateGrid));
+        mineLocations.add(0);
+        GameState currentGameState = new GameState(4, mineLocations);
+        currentGameState.update(1);
+        assertFalse(newGame.checkGameOver());
     }
 
     @Test
     public void revealsMineGridIfHit() {
-        String[] intermediateGrid = new String[]{"•", "•", "•", "•"};
+        intermediateGrid = new String[]{"•", "•", "•", "•"};
         String[] expected = new String[]{"•", "*", "•", "•"};
         mineLocations.add(1);
         GameState newGame = new GameState(4, mineLocations);
@@ -35,17 +40,17 @@ public class GameStateTest {
 
     @Test
     public void revealsIntermediateBoardWithGuesses() {
-        String[] intermediateGrid = new String[]{"•", "•", "1", "•"};
+        intermediateGrid = new String[]{"•", "•", "1", "•"};
         String[] expected = new String[]{"•", "•", "1", "•"};
         mineLocations.add(1);
         GameState newGame = new GameState(4, mineLocations);
-        newGame.revealNeighbours(2);
+        newGame.update(2);
         assertEquals(expected, intermediateGrid);
     }
 
     @Test
     public void addsMines() {
-        GameState newGame = new GameState(4, mineLocations, intermediateGrid);
+        GameState newGame = new GameState(4, mineLocations);
         ArrayList<Integer> mineAdditions = new ArrayList<Integer>();
         mineLocations.add(1);
         mineLocations.add(2);

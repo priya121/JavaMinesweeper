@@ -1,7 +1,6 @@
-import com.mycompany.app.resources.Display;
-import com.mycompany.app.resources.FakeIO;
+package com.mycompany.app.game;
+
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -12,7 +11,6 @@ import static java.util.Arrays.asList;
 
 public class DisplayTest {
     ArrayList<Integer> mineLocations;
-    private Display newGrid;
 
     private FakeIO getFakeIO(List<String> numbers) {
         return new FakeIO(numbers);
@@ -26,11 +24,9 @@ public class DisplayTest {
     }
 
     @Test
-    @Ignore
     public void placesASymbolForMine() {
-        mineLocations.add(1);
-        mineLocations.add(2);
+        ArrayList<Integer> mineLocations = null;
         FakeIO io = getFakeIO(asList("A2"));
-        newGrid = new Display(io, mineLocations, 4);
+        Display newGrid = new Display(io, 4);
     }
 }

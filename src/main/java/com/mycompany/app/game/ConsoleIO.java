@@ -1,4 +1,4 @@
-package com.mycompany.app.resources;
+package com.mycompany.app.game;
 
 import java.io.*;
 
@@ -21,7 +21,12 @@ public class ConsoleIO implements IO {
     }
 
     @Override
-    public String showGrid() {
-        return null;
+    public void showGrid(String[] grid) {
+        output.println(grid);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        output.println(message);
     }
 }

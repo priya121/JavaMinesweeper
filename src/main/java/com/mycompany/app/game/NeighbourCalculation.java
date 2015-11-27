@@ -1,4 +1,4 @@
-package com.mycompany.app.resources;
+package com.mycompany.app.game;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,18 +13,21 @@ public class NeighbourCalculation {
         this.width = (int) Math.sqrt(size);
         this.height = (int) Math.sqrt(size);
         this.location = location;
+        this.neighbours = new ArrayList<Integer>();
     }
 
     public List<Integer> calculate() {
-        this.neighbours = new ArrayList<Integer>();
         int xLocation = (location % width);
         int yLocation = (location / height);
+        calculateNeighboursForCell(xLocation, yLocation);
 
+        return neighbours;
+    }
+
+    private void calculateNeighboursForCell(int xLocation, int yLocation) {
         anyTopRowNeighbours(xLocation, yLocation);
         anyEdgeColumnNeighbours(xLocation);
         anyBottomNeighbours(xLocation, yLocation);
-
-        return neighbours;
     }
 
     private void anyBottomNeighbours(int xLocation, int yLocation) {

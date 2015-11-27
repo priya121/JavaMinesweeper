@@ -1,4 +1,5 @@
-import com.mycompany.app.resources.ConsoleIO;
+package com.mycompany.app.game;
+
 import org.junit.Test;
 
 import java.io.*;

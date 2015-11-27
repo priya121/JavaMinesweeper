@@ -1,4 +1,4 @@
-package com.mycompany.app.resources;
+package com.mycompany.app.game;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,11 +12,16 @@ public class FakeIO implements IO {
 
     @Override
     public String takeInput() {
-        return String.valueOf(coordinates.pop());
+        return coordinates.pop();
     }
 
     @Override
-    public String showGrid() {
-        return null;
+    public void showGrid(String[] message) {
+        System.out.println(message);
+    }
+
+    @Override
+    public void showMessage(String message) {
+        System.out.println(message);
     }
 }

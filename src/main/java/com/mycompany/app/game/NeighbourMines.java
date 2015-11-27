@@ -1,16 +1,17 @@
-package com.mycompany.app.resources;
+package com.mycompany.app.game;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MineSweeper {
+public class NeighbourMines {
 
     public int size;
+    public int minesFound = 0;
     private int width;
     private int height;
-    private ArrayList<Integer> mineLocations = new ArrayList<Integer>();
+    private ArrayList<Integer> mineLocations;
 
-    public MineSweeper(int size, ArrayList<Integer> mineLocations) {
+    public NeighbourMines(int size, ArrayList<Integer> mineLocations) {
         this.mineLocations = mineLocations;
         this.size = size;
         this.width = (int) Math.sqrt(this.size);
@@ -23,16 +24,20 @@ public class MineSweeper {
 
     public int neighbourMinesFound(int location) {
         NeighbourCalculation neighboursAroundLocation = new NeighbourCalculation(size, location);
-        int minesFound = 0;
         minesFound = getTotalMinesFound(location, neighboursAroundLocation, minesFound);
         return minesFound;
     }
 
     private int getTotalMinesFound(int location, NeighbourCalculation neighboursAroundLocation, int minesFound) {
         if (!hasMine(location)) {
-            List<Integer> neighbours = neighboursAroundLocation.calculate();
-            minesFound = addingIndividualMinesFound(minesFound, neighbours);
+            minesFound = showAllMines(neighboursAroundLocation, minesFound);
         }
+        return minesFound;
+    }
+
+    private int showAllMines(NeighbourCalculation neighboursAroundLocation, int minesFound) {
+        List<Integer> neighbours = neighboursAroundLocation.calculate();
+        minesFound = addingIndividualMinesFound(minesFound, neighbours);
         return minesFound;
     }
 

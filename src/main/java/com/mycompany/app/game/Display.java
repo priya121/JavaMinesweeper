@@ -11,15 +11,15 @@ public class Display {
     private int counter = 1;
     private int index;
 
-    public Display(IO io, ArrayList<Integer> mineLocations, int size) {
+    public Display(IO io, int size) {
         this.io = io;
         this.mineLocations = addMines();
         this.size = size;
     }
 
     public static void main(String args[]) {
-        Display game = new Display(io, mineLocations, 100);
-        GameState newGameState = new GameState(game.size, mineLocations);
+        Display game = new Display(io, 100);
+        GameState newGameState = new GameState(100, mineLocations);
         showInitialState(game, newGameState);
         game.gameLoop();
     }
@@ -28,20 +28,21 @@ public class Display {
         mineLocations = new ArrayList<Integer>();
         mineLocations.add(1);
         mineLocations.add(10);
+        mineLocations.add(90);
         return mineLocations;
     }
 
     private static void showInitialState(Display game, GameState newGameState) {
-        io.showMessage(game.convertToStringDisplay(newGameState.buildInitialGrid()));
+        io.showMessage(game.convertToStringDisplay(newGameState.getCurrentState()));
         io.showMessage("Enter a coordinate: \n");
     }
 
     public void gameLoop() {
-        GameState currentGameState = new GameState(size, mineLocations);
-        while (!currentGameState.checkGameOver()) {
-            nextUserMove(currentGameState);
+        GameState gameState = new GameState(size, mineLocations);
+        while (!gameState.checkGameOver()) {
+            nextUserMove(gameState);
         }
-        io.showMessage(convertToStringDisplay(currentGameState.getCurrentState()));
+        io.showMessage(convertToStringDisplay(gameState.getCurrentState()));
     }
 
     private void nextUserMove(GameState currentGameState) {
@@ -69,11 +70,15 @@ public class Display {
 
     private String addRowLetters(String[] array, int counter, String grid) {
         grid += rowLetter[0];
+        grid = RowLettersFromSecondRowOnwards(array, counter, grid);
+        return grid;
+    }
+
+    private String RowLettersFromSecondRowOnwards(String[] array, int counter, String grid) {
         for (int i = 0; i < array.length; i++) {
             grid += (array[i] + " ");
             if ((i + 1) % Math.sqrt(size) == 0) {
-                grid += "\n";
-                grid += (rowLetter[counter++]);
+                grid += "\n" + (rowLetter[counter++]);
             }
         }
         return grid;
@@ -81,10 +86,15 @@ public class Display {
 
     private String addColumnNumbers() {
         String grid = "   ";
+        grid = addIndividualColumnNumbers(grid);
+        grid += "\n";
+        return grid;
+    }
+
+    private String addIndividualColumnNumbers(String grid) {
         for (int n = 0; n < Math.sqrt(size); n++) {
             grid += columnNumber[n] + " ";
         }
-        grid += "\n";
         return grid;
     }
 
