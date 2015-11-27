@@ -3,7 +3,7 @@ package com.mycompany.app.game;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NeighbourMines {
+public class NeighbourMineIncrement {
 
     public int size;
     public int minesFound = 0;
@@ -11,7 +11,7 @@ public class NeighbourMines {
     private int height;
     private ArrayList<Integer> mineLocations;
 
-    public NeighbourMines(int size, ArrayList<Integer> mineLocations) {
+    public NeighbourMineIncrement(int size, ArrayList<Integer> mineLocations) {
         this.mineLocations = mineLocations;
         this.size = size;
         this.width = (int) Math.sqrt(this.size);
