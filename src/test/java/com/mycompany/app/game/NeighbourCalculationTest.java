@@ -1,4 +1,5 @@
-import com.mycompany.app.resources.NeighbourCalculation;
+package com.mycompany.app.game;
+
 import org.junit.Assert;
 import org.junit.Test;
 
