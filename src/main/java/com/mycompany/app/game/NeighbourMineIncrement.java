@@ -23,19 +23,19 @@ public class NeighbourMineIncrement {
     }
 
     public int neighbourMinesFound(int location) {
-        NeighbourCalculation neighboursAroundLocation = new NeighbourCalculation(size, location);
+        NeighboursCalculation neighboursAroundLocation = new NeighboursCalculation(size, location);
         minesFound = getTotalMinesFound(location, neighboursAroundLocation, minesFound);
         return minesFound;
     }
 
-    private int getTotalMinesFound(int location, NeighbourCalculation neighboursAroundLocation, int minesFound) {
+    private int getTotalMinesFound(int location, NeighboursCalculation neighboursAroundLocation, int minesFound) {
         if (!hasMine(location)) {
             minesFound = showAllMines(neighboursAroundLocation, minesFound);
         }
         return minesFound;
     }
 
-    private int showAllMines(NeighbourCalculation neighboursAroundLocation, int minesFound) {
+    private int showAllMines(NeighboursCalculation neighboursAroundLocation, int minesFound) {
         List<Integer> neighbours = neighboursAroundLocation.calculate();
         minesFound = addingIndividualMinesFound(minesFound, neighbours);
         return minesFound;

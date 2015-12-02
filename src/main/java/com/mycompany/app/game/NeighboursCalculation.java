@@ -3,13 +3,13 @@ package com.mycompany.app.game;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NeighbourCalculation {
+public class NeighboursCalculation {
     int width;
     int height;
     int location;
     ArrayList<Integer> neighbours;
 
-    public NeighbourCalculation(int size, int location) {
+    public NeighboursCalculation(int size, int location) {
         this.width = (int) Math.sqrt(size);
         this.height = (int) Math.sqrt(size);
         this.location = location;
@@ -17,6 +17,7 @@ public class NeighbourCalculation {
     }
 
     public List<Integer> calculate() {
+        this.neighbours = new ArrayList<Integer>();
         int xLocation = (location % width);
         int yLocation = (location / height);
         calculateNeighboursForCell(xLocation, yLocation);
@@ -42,7 +43,7 @@ public class NeighbourCalculation {
     }
 
     private void anyTopRowNeighbours(int xLocation, int yLocation) {
-        notTopLeftCorner(location, xLocation);
+        notTopLeftCorner(location, xLocation, yLocation);
         notFirstRow(location, yLocation);
         notTopRightCorner(location, xLocation, yLocation);
     }
@@ -74,7 +75,7 @@ public class NeighbourCalculation {
 
     private void notTopRightCorner(int location, int xLocation, int yLocation) {
         if (xLocation < (width - 1) && yLocation > 0)
-            neighbours.add(location - (width - 1));
+            neighbours.add(location - (width) + 1);
     }
 
     private void notFirstRow(int location, int yLocation) {
@@ -82,10 +83,8 @@ public class NeighbourCalculation {
             neighbours.add(((location - (width))));
     }
 
-    private void notTopLeftCorner(int location, int xLocation) {
-        if (xLocation > 0 && location > 1)
-            neighbours.add((location - (width) - 1));
+    private void notTopLeftCorner(int location, int xLocation, int yLocation) {
+        if (xLocation > 0 && yLocation > 0)
+            neighbours.add((location - (width + 1)));
     }
 }
-
-

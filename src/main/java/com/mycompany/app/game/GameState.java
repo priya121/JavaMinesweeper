@@ -5,9 +5,10 @@ import java.util.List;
 
 public class GameState {
     private final int size;
-    private NeighbourMines game;
+    private NeighbourMineIncrement game;
     private ArrayList<Integer> mineLocations;
     private String[] gridArray;
+    private List<Integer> uncheckedNeighbours;
 
     public enum Status {
         MINE("*"),
@@ -28,6 +29,7 @@ public class GameState {
         this.size = size;
         this.mineLocations = mineLocations;
         this.gridArray = buildInitialGrid();
+        this.uncheckedNeighbours = initializeUncheckedNeighbours();
     }
 
     public boolean checkGameOver() {
@@ -44,9 +46,10 @@ public class GameState {
     }
 
     public void update(int guessedIndex) {
-        this.game = new NeighbourMines(size, mineLocations);
+        this.game = new NeighbourMineIncrement(size, mineLocations);
         if (mineLocations.contains(guessedIndex)) addMineSymbol(mineLocations);
         else gridArray[guessedIndex] = String.valueOf(game.neighbourMinesFound(guessedIndex));
+            removeIndexFromUnchecked(guessedIndex);
     }
 
     public String[] addMineSymbol(ArrayList<Integer> mineLocations) {
@@ -65,5 +68,20 @@ public class GameState {
 
     public String[] getCurrentState() {
         return gridArray;
+    }
+
+    public List<Integer> initializeUncheckedNeighbours() {
+        uncheckedNeighbours = new ArrayList<Integer>();
+        for (int i = 0; i < size; i++) {
+            uncheckedNeighbours.add(i);
+        }
+        return uncheckedNeighbours;
+    }
+
+    public void removeIndexFromUnchecked(int guessedIndex) {
+            if (uncheckedNeighbours.contains(guessedIndex)) {
+                int index = uncheckedNeighbours.indexOf(guessedIndex);
+                uncheckedNeighbours.remove(index);
+        }
     }
 }

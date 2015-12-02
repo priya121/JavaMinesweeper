@@ -1,38 +1,34 @@
 package com.mycompany.app.game;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Display {
-    private static IO io = new ConsoleIO(System.in, System.out);
+    private static IO io;
     private static ArrayList<Integer> mineLocations;
+    private static List uncheckedList;
     private int size;
     private String[] columnNumber = new String[]{"1", "2", "3", "4", "5", "6", "7", "8", "9", "10"};
     private String[] rowLetter = new String[]{"A  ", "B  ", "C  ", "D  ", "E  ", "F  ", "G  ", "H  ", "I  ", "J  ", "K  "};
     private int counter = 1;
     private int index;
 
-    public Display(IO io, int size) {
-        this.io = io;
-        this.mineLocations = addMines();
+    public Display(int size) {
+        this.io = new ConsoleIO(System.in, System.out);
         this.size = size;
+        this.mineLocations = addMines(size);
     }
 
-    public static void main(String args[]) {
-        Display game = new Display(io, 100);
-        GameState newGameState = new GameState(100, mineLocations);
-        showInitialState(game, newGameState);
-        game.gameLoop();
-    }
-
-    private static ArrayList<Integer> addMines() {
+    public ArrayList<Integer> addMines(int size) {
+        RandomizeNumber randomNumber = new RandomizeNumber();
         mineLocations = new ArrayList<Integer>();
-        mineLocations.add(1);
-        mineLocations.add(10);
-        mineLocations.add(90);
+        for (int i = 0; i < 20; i++) {
+            mineLocations.add(randomNumber.numberGenerator(size));
+        }
         return mineLocations;
     }
 
-    private static void showInitialState(Display game, GameState newGameState) {
+    public void showInitialState(Display game, GameState newGameState) {
         io.showMessage(game.convertToStringDisplay(newGameState.getCurrentState()));
         io.showMessage("Enter a coordinate: \n");
     }
@@ -58,7 +54,9 @@ public class Display {
 
     private void getUserCoordinate(GameState currentGameState) {
         String guessedString = io.takeInput();
-        UserCoordinateIndex locationIndex = new UserCoordinateIndex(guessedString, size);
+        UserCoordinate locationIndex = new UserCoordinate(guessedString, size);
+        uncheckedList = currentGameState.initializeUncheckedNeighbours();
+        //RecursiveReveal recurse = new RecursiveReveal(100, mineLocations, uncheckedList);
         currentGameState.update(index = locationIndex.convertCoordinateToIndex());
     }
 

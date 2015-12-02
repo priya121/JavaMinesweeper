@@ -1,10 +1,10 @@
 package com.mycompany.app.game;
 
-public class UserCoordinateIndex {
+public class UserCoordinate {
     int size;
     String coordinates;
 
-    public UserCoordinateIndex(String coordinates, int size) {
+    public UserCoordinate(String coordinates, int size) {
         this.coordinates = coordinates;
         this.size = size;
     }
