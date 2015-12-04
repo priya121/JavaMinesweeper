@@ -5,9 +5,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static java.util.Arrays.asList;
 import static junit.framework.TestCase.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -15,10 +13,6 @@ import static org.junit.Assert.assertTrue;
 public class NeighbourMineIncrementTest {
 
     private ArrayList<Integer> mineLocations;
-
-    public FakeIO getFakeIO(List<String> coordinates) {
-        return new FakeIO(coordinates);
-    }
 
     @Before
     public void setUp() throws Exception {
@@ -40,7 +34,6 @@ public class NeighbourMineIncrementTest {
 
     @Test
     public void twoByTwoGridWithOneMine() {
-        FakeIO io = getFakeIO(asList("A2"));
         mineLocations.add(0);
         NeighbourMineIncrement game = new NeighbourMineIncrement(2, mineLocations);
         assertTrue(game.hasMine(0));

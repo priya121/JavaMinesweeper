@@ -1,17 +1,11 @@
 package com.mycompany.app;
 
-import com.mycompany.app.game.Display;
-import com.mycompany.app.game.GameState;
-
-import java.util.ArrayList;
+import com.mycompany.app.game.Game;
 
 public class App
 {
     public static void main(String args[]) {
-            Display game = new Display(100);
-            ArrayList<Integer> mineLocations = game.addMines(100);
-            GameState newGameState = new GameState(100, mineLocations);
-            game.showInitialState(game, newGameState);
-            game.gameLoop();
+            Game game = new Game(100);
+            game.gameLoop(game);
         }
 }

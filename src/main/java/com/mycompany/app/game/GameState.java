@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameState {
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_GREEN = "\u001B[32m";
     private final int size;
     private NeighbourMineIncrement game;
     private ArrayList<Integer> mineLocations;
@@ -41,18 +44,20 @@ public class GameState {
 
     private String[] buildInitialGrid() {
         String[] initialState = new String[size];
-        for (int i = 0; i < size; i++) initialState[i] = String.valueOf(Status.NOT_REVEALED.getSymbol());
+        for (int i = 0; i < size; i++) {
+            initialState[i] = ANSI_BLUE + String.valueOf(Status.NOT_REVEALED.getSymbol()) + ANSI_RESET;
+        }
         return initialState;
     }
 
     public void update(int guessedIndex) {
         this.game = new NeighbourMineIncrement(size, mineLocations);
-        if (mineLocations.contains(guessedIndex)) addMineSymbol(mineLocations);
-        else gridArray[guessedIndex] = String.valueOf(game.neighbourMinesFound(guessedIndex));
+        if (mineLocations.contains(guessedIndex)) addMineSymbols(mineLocations);
+        else gridArray[guessedIndex] = ANSI_GREEN + String.valueOf(game.neighbourMinesFound(guessedIndex)) + ANSI_RESET;
             removeIndexFromUnchecked(guessedIndex);
     }
 
-    public String[] addMineSymbol(ArrayList<Integer> mineLocations) {
+    public String[] addMineSymbols(ArrayList<Integer> mineLocations) {
         for (int j = 0; j < mineLocations.size(); j++) {
             gridArray[mineLocations.get(j)] = String.valueOf(Status.MINE.symbol);
         }

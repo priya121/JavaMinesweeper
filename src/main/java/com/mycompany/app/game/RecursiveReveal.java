@@ -4,11 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecursiveReveal {
-    private List<String> board;
     private ArrayList<Integer> mineLocations;
     private List<Integer> uncheckedList;
     private int size;
-    private NeighbourMineIncrement game;
 
     public RecursiveReveal(int size, ArrayList<Integer> mineLocations, List<Integer> uncheckedList) {
         this.size = size;
@@ -21,21 +19,33 @@ public class RecursiveReveal {
         return neighbourCalculation.calculate();
     }
 
-    public GameState recursiveReveal(int position, GameState gameState) {
-        List<Integer> neighboursOfCellChosen = getNeighbours(position);
-        for (Integer neighbourCellIndex : neighboursOfCellChosen) {
+    public void checkIfRecurse(int position, GameState gameState) {
+        NeighbourMineIncrement neighbourMines = new NeighbourMineIncrement(size, mineLocations);
+        if (neighbourMines.neighbourMinesFound(position) > 0) {
+            gameState.update(position);
+        }
+        else {
+            recursiveReveal(position, gameState);
+        }
+    }
 
-            NeighbourMineIncrement game = new NeighbourMineIncrement(size, mineLocations);
-            int amountOfMines = game.neighbourMinesFound(neighbourCellIndex);
-            if (!game.hasMine(neighbourCellIndex)) {
+    public void recursiveReveal(int position, GameState gameState) {
+        List<Integer> neighboursOfCellChosen = getNeighbours(position);
+
+        for (Integer neighbourCellIndex : neighboursOfCellChosen) {
+            NeighbourMineIncrement neighbourMines = new NeighbourMineIncrement(size, mineLocations);
+            boolean noMinesFound = !neighbourMines.hasMine(neighbourCellIndex);
+
+            if (noMinesFound) {
+                gameState.update(position);
                 gameState.update(neighbourCellIndex);
-                if (amountOfMines == 0 && uncheckedList.contains(neighbourCellIndex)) {
-                    removeVisitedCell(neighbourCellIndex);
-                    recursiveReveal(neighbourCellIndex, gameState);
+
+                if (neighbourMines.neighbourMinesFound(neighbourCellIndex) == 0 && uncheckedList.contains(neighbourCellIndex)) {
+                        removeVisitedCell(neighbourCellIndex);
+                        recursiveReveal(neighbourCellIndex, gameState);
+                    }
                 }
             }
-        }
-        return gameState;
     }
 
     private void removeVisitedCell(int neighbourCellIndex) {

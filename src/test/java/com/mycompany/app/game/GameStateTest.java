@@ -35,7 +35,7 @@ public class GameStateTest {
         String[] expected = new String[]{"•", "*", "•", "•"};
         mineLocations.add(1);
         GameState newGame = new GameState(4, mineLocations);
-        assertEquals(expected, newGame.addMineSymbol(mineLocations));
+        assertEquals(expected, newGame.addMineSymbols(mineLocations));
     }
 
     @Test

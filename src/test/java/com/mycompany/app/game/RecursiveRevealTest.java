@@ -3,10 +3,6 @@ package com.mycompany.app.game;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
-import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +39,31 @@ public class RecursiveRevealTest {
     }
 
     @Test
+    public void revealsEmptyCells() {
+        ArrayList<Integer> mineLocations = new ArrayList<Integer>();
+        List<Integer> uncheckedList = new ArrayList<Integer>();
+        uncheckedList.addAll(asList(0, 1, 2, 4));
+        RecursiveReveal reveal = new RecursiveReveal(4, mineLocations, uncheckedList);
+        game = new GameState(4, mineLocations);
+        reveal.recursiveReveal(0, game);
+        String[] grid = new String[]{"0", "0", "0", "0"};
+        assertEquals(grid, game.getCurrentState());
+    }
+
+    @Test
+    public void revealsIndividualCellIfNotZero() {
+        ArrayList<Integer> mineLocations = new ArrayList<Integer>();
+        mineLocations.add(3);
+        List<Integer> uncheckedList = new ArrayList<Integer>();
+        uncheckedList.addAll(asList(0, 1, 2, 4));
+        RecursiveReveal reveal = new RecursiveReveal(4, mineLocations, uncheckedList);
+        game = new GameState(4, mineLocations);
+        String[] expectedGrid = new String[]{"1", "•", "•", "•"};
+        reveal.checkIfRecurse(0, game);
+        assertEquals(expectedGrid, game.getCurrentState());
+    }
+
+    @Test
     public void revealAllCellsExceptMine() {
         ArrayList<Integer> mineLocations = new ArrayList<Integer>();
         mineLocations.add(8);
@@ -50,11 +71,9 @@ public class RecursiveRevealTest {
         uncheckedList.addAll(asList(0, 1, 2, 4, 5, 6, 7, 8));
         RecursiveReveal reveal = new RecursiveReveal(9, mineLocations, uncheckedList);
         game = new GameState(9, mineLocations);
-        String finalGrid = "   1 2 3 \n" +
-                           "A  0 0 0 \n" +
-                           "B  0 1 1 \n" +
-                           "C  0 1 •";
-        assertEquals(finalGrid, convertToString(reveal.recursiveReveal(3, game), 9));
+        String[] expectedGrid = new String[]{"0", "0", "0", "0", "1","1","0","1","•"};
+        reveal.recursiveReveal(3,game);
+        assertEquals(expectedGrid, game.getCurrentState());
     }
 
     @Test
@@ -65,21 +84,63 @@ public class RecursiveRevealTest {
         uncheckedList.addAll(asList(0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25));
         RecursiveReveal reveal = new RecursiveReveal(25, mineLocations, uncheckedList);
         game = new GameState(25, mineLocations);
-        String finalGrid ="   1 2 3 4 5 \n" +
-                          "A  0 0 1 • • \n" +
-                          "B  0 0 1 • • \n" +
-                          "C  0 0 1 1 1 \n" +
-                          "D  0 0 0 0 0 \n" +
-                          "E  0 0 0 0 0";
-        assertEquals(finalGrid, convertToString(reveal.recursiveReveal(0, game), 25));
+        String[] expectedGrid = new String[]{"0", "0", "1", "•", "•",
+                                             "0", "0", "1", "•", "•",
+                                             "0", "0", "1", "1", "1",
+                                             "0", "0", "0", "0", "0",
+                                             "0", "0", "0", "0", "0"};
+        reveal.recursiveReveal(6, game);
+        assertEquals(expectedGrid, game.getCurrentState());
     }
 
-    private String convertToString(GameState game, int size) {
-        ByteArrayOutputStream recordedOutput = new ByteArrayOutputStream();
-        InputStream inputStream = new ByteArrayInputStream("A1\n".getBytes());
-        PrintStream out = new PrintStream(recordedOutput);
-        IO io = new ConsoleIO(inputStream, out);
-        Display newGrid = new Display(size);
-        return newGrid.convertToStringDisplay(game.getCurrentState());
+    @Test
+    public void revealsEmptyPatchOnEdgeOfTenByTenGrid() {
+        ArrayList<Integer> mineLocations = new ArrayList<Integer>();
+        mineLocations.add(8);
+        List<Integer> uncheckedList = new ArrayList<Integer>();
+        uncheckedList.addAll(asList(0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25));
+        RecursiveReveal reveal = new RecursiveReveal(25, mineLocations, uncheckedList);
+        game = new GameState(25, mineLocations);
+        String[] expectedGrid = new String[]{"0", "0", "1", "•", "•",
+                                             "0", "0", "1", "•", "•",
+                                             "0", "0", "1", "1", "1",
+                                             "0", "0", "0", "0", "0",
+                                             "0", "0", "0", "0", "0"};
+        reveal.checkIfRecurse(0,game);
+        assertEquals(expectedGrid, game.getCurrentState());
+    }
+
+    @Test
+    public void revealsNeighboursIfNot0() {
+        ArrayList<Integer> mineLocations = new ArrayList<Integer>();
+        mineLocations.add(8);
+        List<Integer> uncheckedList = new ArrayList<Integer>();
+        uncheckedList.addAll(asList(0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 21, 22, 23, 24, 25));
+        RecursiveReveal reveal = new RecursiveReveal(25, mineLocations, uncheckedList);
+        game = new GameState(25, mineLocations);
+        String[] expectedGrid = new String[]{"•", "•", "1", "•", "•",
+                                             "•", "•", "•", "•", "•",
+                                             "•", "•", "•", "•", "•",
+                                             "•", "•", "•", "•", "•",
+                                             "•", "•", "•", "•", "•"};
+        reveal.checkIfRecurse(2,game);
+        assertEquals(expectedGrid, game.getCurrentState());
+    }
+
+    @Test
+    public void revealsEmptyPatchInMiddleOfTenByTenGrid() {
+        ArrayList<Integer> mineLocations = new ArrayList<Integer>();
+        mineLocations.addAll(asList(0,1,2,3,4,5,9,10,14,15,19,20,21,22,23,24));
+        List<Integer> uncheckedList = new ArrayList<Integer>();
+        uncheckedList.addAll(asList(0, 1, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25));
+        RecursiveReveal reveal = new RecursiveReveal(25, mineLocations, uncheckedList);
+        game = new GameState(25, mineLocations);
+        String[] expectedGrid = new String[]{"•", "•", "•", "•", "•",
+                                             "•", "5", "3", "5", "•",
+                                             "•", "3", "0", "3", "•",
+                                             "•", "5", "3", "5", "•",
+                                             "•", "•", "•", "•", "•"};
+        reveal.checkIfRecurse(12,game);
+        assertEquals(expectedGrid, game.getCurrentState());
     }
 }

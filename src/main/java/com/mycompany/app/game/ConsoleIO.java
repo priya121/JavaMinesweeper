@@ -21,12 +21,8 @@ public class ConsoleIO implements IO {
     }
 
     @Override
-    public void showGrid(String[] grid) {
-        output.println(grid);
-    }
-
-    @Override
-    public void showMessage(String message) {
+    public String showMessage(String message) {
         output.println(message);
+        return null;
     }
 }
