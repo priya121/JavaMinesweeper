@@ -46,15 +46,15 @@ public class Game {
         io.showMessage(ANSI_RED + "\nEnter a coordinate: \n" + ANSI_RESET);
     }
 
-    public void gameLoop(Game game) {
-        ArrayList<Integer> mineLocations = game.addMines(100);
+    public void gameLoop() {
+        ArrayList<Integer> mineLocations = this.addMines(100);
         GameState gameState = new GameState(size, mineLocations);
-        game.showInitialState(gameState);
+        this.showInitialState(gameState);
         while (!gameState.checkGameOver()) {
             nextUserMove(gameState);
         }
         gameOver(gameState);
-        askIfReplayGame(game);
+        askIfReplayGame();
     }
 
     private void gameOver(GameState gameState) {
@@ -63,10 +63,10 @@ public class Game {
         io.showMessage(ANSI_RESET + "\nYou Hit a Mine! Game Over!\n\nWould you like to play again? (Y/N)");
     }
 
-    private void askIfReplayGame(Game game) {
+    private void askIfReplayGame() {
         if (io.takeInput().equals("Y")) {
             grid.clearScreen();
-            gameLoop(game);
+            gameLoop();
         }
     }
 
